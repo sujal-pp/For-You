@@ -23,7 +23,6 @@
             background-position: center;
         }
 
-        /* Floating Elements */
         .heart {
             position: absolute;
             pointer-events: none;
@@ -36,7 +35,11 @@
             100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
 
-        /* Card Setup */
+        @keyframes hoverFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
         .container {
             position: relative;
             z-index: 10;
@@ -59,7 +62,6 @@
             font-weight: 300;
         }
 
-        /* HIDDEN BY DEFAULT */
         #final-reveal {
             opacity: 0;
             transform: scale(0.8);
@@ -79,7 +81,7 @@
             align-items: center;
             gap: 15px;
             margin-top: 25px;
-            min-height: 80px;
+            min-height: 100px;
         }
 
         button {
@@ -89,13 +91,20 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: hoverFloat 3s ease-in-out infinite;
+        }
+
+        #noBtn { animation-delay: 0.5s; }
+
+        button:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
         }
 
         .yes { background: var(--accent-green); color: #004d2c; }
         .no { background: #ff4d4d; color: white; }
 
-        /* The Celebration Screen */
         .celebration {
             position: fixed;
             inset: 0;
@@ -107,6 +116,7 @@
             background: linear-gradient(135deg, #ff758c, #ff4d4d);
             color: white;
             text-align: center;
+            padding: 20px;
         }
 
         .social-btn {
@@ -128,10 +138,10 @@
     <div class="typing" id="text"></div>
 
     <div id="final-reveal">
-        <h2 style="margin-top: 10px;">Will you be mine, Madam Ji? 😘🤭</h2>
+        <h2 id="mainQuestion" style="margin-top: 10px;">Will you be mine? 🤭</h2>
         <div class="buttons">
             <button class="yes" id="yesBtn" onclick="yesClick()">Yes 😍</button>
-            <button class="no" id="noBtn" onmouseover="noToYes()" onclick="noToYes()">No 😅</button>
+            <button class="no" id="noBtn" onclick="noClick()">No 😅</button>
         </div>
     </div>
 </div>
@@ -168,7 +178,6 @@
                 charIdx++;
                 setTimeout(type, 70);
             } else {
-                // Wait a bit, then clear for next line
                 setTimeout(() => {
                     if (lineIdx < lines.length - 1) {
                         target.innerHTML = "";
@@ -176,7 +185,6 @@
                         lineIdx++;
                         type();
                     } else {
-                        // ALL TYPING FINISHED
                         showQuestion();
                     }
                 }, 1500);
@@ -188,16 +196,32 @@
         document.getElementById("final-reveal").classList.add("show");
     }
 
-    type(); // Start the typing
+    type(); 
 
-    // 3. Button Logic
-    function noToYes() {
+    // 3. Updated Logic for the emoji 😩
+    let noClickCount = 0;
+
+    function noClick() {
         const noBtn = document.getElementById("noBtn");
-        noBtn.innerHTML = "Yes! 😍";
-        noBtn.style.background = "#00ff88";
-        noBtn.style.color = "#004d2c";
-        noBtn.onclick = yesClick;
-        document.getElementById("yesBtn").style.transform = "scale(1.3)";
+        const question = document.getElementById("mainQuestion");
+        
+        noClickCount++;
+
+        if (noClickCount === 1) {
+            // Main question text changes
+            question.innerHTML = "Think again! 🤔";
+            // No button emoji changes to 😩
+            noBtn.innerHTML = "No 😩";
+        } else if (noClickCount >= 2) {
+            // Second click: No button transforms to Yes
+            noBtn.innerHTML = "Yes! 😍";
+            noBtn.style.background = "#00ff88";
+            noBtn.style.color = "#004d2c";
+            noBtn.onclick = yesClick;
+            
+            // Speed up the hover animation for excitement
+            noBtn.style.animation = "hoverFloat 1s ease-in-out infinite";
+        }
     }
 
     function yesClick() {
@@ -205,8 +229,8 @@
         const final = document.createElement("div");
         final.className = "celebration";
         final.innerHTML = `
-            <h1 style="font-size: 3rem;"> I knew you couldn't say no! 😉💖</h1>
-            <p>Click Down to Msg me👇</p>
+            <h1 style="font-size: 2.5rem; margin-bottom: 10px;"> I knew you couldn't say no! 😉💖</h1>
+            <p style="font-size: 1.2rem;">Check your messages!</p>
             <a href="https://www.instagram.com/sujalbhurtel_069/#" target="_blank" class="social-btn">Message Me Now 💌</a>
         `;
         document.body.appendChild(final);
