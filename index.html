@@ -225,17 +225,26 @@
     }
 
     function yesClick() {
-        document.querySelector(".container").style.display = "none";
-        const final = document.createElement("div");
-        final.className = "celebration";
-        final.innerHTML = `
-            <h1 style="font-size: 2.5rem; margin-bottom: 10px;"> I knew you couldn't say no! 😉💖</h1>
-            <p style="font-size: 1.2rem;">Check your messages!</p>
-            <a href="https://www.instagram.com/sujalbhurtel_069/#" target="_blank" class="social-btn">Message Me Now 💌</a>
-        `;
-        document.body.appendChild(final);
-        for(let i=0; i<100; i++) setTimeout(spawnHearts, i*20);
-    }
+    document.querySelector(".container").style.display = "none";
+    const final = document.createElement("div");
+    final.className = "celebration";
+    
+    // Updated HTML to include the GIF at the top
+    final.innerHTML = `
+        <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXB5eHVicHJrZWhvc3J1dm9qZTRvdnlxY2I1ZWJ3cTJtOXBjMnE5aSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1JmGiBtqTuehfYxuy9/giphy.gif" 
+             alt="Hugging Bears" 
+             style="width: 200px; margin-bottom: 20px; border-radius: 20px;">
+        
+        <h1 style="font-size: 2.5rem; margin-bottom: 10px;"> I knew you couldn't say no! 😉💖</h1>
+        <p style="font-size: 1.2rem;">Check your messages!</p>
+        <a href="https://www.instagram.com/sujalbhurtel_069/#" target="_blank" class="social-btn">Message Me Now 💌</a>
+    `;
+    
+    document.body.appendChild(final);
+    
+    // Burst of hearts for the celebration
+    for(let i=0; i<100; i++) setTimeout(spawnHearts, i*20);
+}
 </script>
 
 </body>
